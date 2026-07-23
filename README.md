@@ -32,8 +32,9 @@ For setup guides and usage examples, see the [GUIDES](GUIDES.md).
 ### Player Commands
 | Command | Usage | Description |
 |---------|-------|-------------|
+| `!help` | `!help` | Shows list of available commands. |
 | `!unstuck` | `!unstuck` | Teleports yourself to a safe point. |
-| `!time` | `!time` | Displays the current in-game time. |
+| `!time` | `!time` | Displays the current in-game time. | 
 
 ## Licensing
 If you wish to use the code in your projects just provide credit, that's all I ask.
