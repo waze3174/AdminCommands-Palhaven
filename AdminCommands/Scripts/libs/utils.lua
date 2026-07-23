@@ -16,7 +16,8 @@ function utils.sendPersonalAnnounce(PalPlayerController, Message)
             return
         end
 
-        PalUtilities:SendSystemToPlayerChat(world, Message, { playerState.PlayerUId })
+        local guidArray = { FGuid.translate(playerState.PlayerUId) }
+        PalUtilities:SendSystemToPlayerChat(world, Message, guidArray)
     end)
 end
 

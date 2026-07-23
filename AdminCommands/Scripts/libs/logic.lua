@@ -6,7 +6,7 @@ local config = require("config/config")
 local logic = {}
 
 for k in pairs(commandHandlers) do
-    print("[AdminX] Registered command: " .. k .. "\n")
+    print("[AdminCommands] Registered command: " .. k .. "\n")
 end
 
 function logic.chatHook(ctx, Message, Category)

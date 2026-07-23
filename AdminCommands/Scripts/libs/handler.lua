@@ -5,6 +5,7 @@ local spawn = require("modules/spawn")
 local freeze = require("modules/freeze")
 local server = require("modules/server")
 local items = require("modules/items")
+local utils = require("libs/utils")
 
 local commandHandlers = {
     ban = { admin = true, func = admin.handleBan },
@@ -43,6 +44,18 @@ local commandHandlers = {
     announce = { admin = true, func = server.handleAnnounce },
     unstuck = { admin = false, func = teleport.handleUnstuck },
     time = { admin = false, func = server.handleCurrentTime },
+    help = {
+        admin = false,
+        func = function(state)
+            local pc = state:GetPlayerController()
+            utils.sendPersonalAnnounce(pc,
+                "!give Player item:amount | !giveme item:amount | !catch Pal Level [shiny] | !spawn Pal Level [shiny] | " ..
+                "!fly enable/disable | !freeze Player | !unfreeze Player | !announce msg | !settime 0-23 | " ..
+                "!goto x,y,z | !goto Player | !getpos [Player] | !time | !unstuck | " ..
+                "!ban Player reason | !unban Player | !kick Player | !bring Player | !bringall"
+            )
+        end
+    },
 }
 
 return commandHandlers
