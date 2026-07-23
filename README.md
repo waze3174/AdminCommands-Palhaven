@@ -1,9 +1,13 @@
 # Palworld Admin Commands
 This is an admin mod for Palworld dedicated servers. Its still in early development and coded to be cleaner than the original obfuscated mod.
 
+Find this mod on [NexusMods](https://www.nexusmods.com/palworld/mods/2371) and [CurseForge](https://www.curseforge.com/palworld/lua-code-mods/admin-commands)!
+
 ## Commands
 
 All commands use the `!` prefix in-game. This can be changed in the `config/config.lua`.
+
+For setup guides and usage examples, see the [GUIDES](GUIDES.md).
 
 ### Admin Commands
 | Command | Usage | Description |
