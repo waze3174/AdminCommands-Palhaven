@@ -38,6 +38,17 @@ local commandHandlers = {
         end
     },
     giveme = { admin = true, func = items.handlePersonalGive },
+    exp = {
+        admin = true,
+        func = function(state, rest)
+            if not rest or rest == "" or not rest:find(" ") then
+                items.handlePersonalExp(state, rest)
+            else
+                items.handleExpCommand(state, rest)
+            end
+        end
+    },
+    giveexp = { admin = true, func = items.handlePersonalExp },
     freeze = { admin = true, func = freeze.handleFreeze },
     unfreeze = { admin = true, func = freeze.handleUnfreeze },
     settime = { admin = true, func = server.handleSetTime },

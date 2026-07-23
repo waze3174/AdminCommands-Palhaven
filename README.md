@@ -20,10 +20,11 @@ For setup guides and usage examples, see the [GUIDES](GUIDES.md).
 | `!getpos` | `!getpos` or `!getpos <player>` | Shows your current position or another player's position. |
 | `!bring` | `!bring <player>` | Teleports a player to your location. |
 | `!bringall` | `!bringall` | Teleports all other players to your location. |
-| `!spawn` | `!spawn <PalName> <level> [shiny]` | Spawns a Pal near you at the given level. Pass `true` for shiny. |
-| `!catch` | `!catch <PalName> <level> [shiny]` | Spawns a Pal and automatically captures it. Pass `true` for shiny. |
-| `!give` | `!give <player> <item>:<amount> <item2>:<amount>` | Gives items to a target player. If no player name is given, gives to yourself. |
-| `!giveme` | `!giveme <item>:<amount> <item2>:<amount>` | Gives items directly to yourself. |
+| `!spawn` | `!spawn <PalAsset> <level> [shiny]` | Spawns a Pal near you at the given level. Pass `true` for shiny. |
+| `!catch` | `!catch <PalAsset> <level> [shiny]` | Spawns a Pal and automatically captures it. Pass `true` for shiny. |
+| `!give` | `!give <player> <ItemAsset>:<amount> <ItemAsset2>:<amount>` | Gives items to a target player. If no player name is given, gives to yourself. |
+| `!giveme` | `!giveme <ItemAsset>:<amount> <ItemAsset2>:<amount>` | Gives items directly to yourself. |
+| `!exp` | `!exp <amount>` or `!exp <player> <amount>` | Grants EXP to yourself or a target player. |
 | `!freeze` | `!freeze <player>` | Freezes a player in place, preventing all movement. |
 | `!unfreeze` | `!unfreeze <player>` | Unfreezes a previously frozen player. |
 | `!settime` | `!settime <hour>` | Sets the in-game time (0–23). |

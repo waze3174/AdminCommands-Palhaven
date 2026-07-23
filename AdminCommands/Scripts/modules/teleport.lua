@@ -17,7 +17,7 @@ function commands.handleGoto(state, rest)
             return
         end
 
-        local palUtility = StaticFindObject("/Script/Pal.Default__PalUtility")
+        local palUtility = utils.getPalUtilities()
         if palUtility and palUtility:IsValid() then
             local vec = {X = tonumber(x), Y = tonumber(y), Z = tonumber(z) + 500}
             local quat = {X = 0, Y = 0, Z = 0, W = 0}
@@ -42,7 +42,7 @@ function commands.handleGoto(state, rest)
                 local char = pc.Pawn
                 
                 if targetChar and targetChar:IsValid() and char and char:IsValid() then
-                    local palUtility = StaticFindObject("/Script/Pal.Default__PalUtility")
+                    local palUtility = utils.getPalUtilities()
                     if palUtility and palUtility:IsValid() then
                         local loc = {X = 0, Y = 0, Z = 0}
                         local ok = palUtility:TryGetHeadWorldPosition(targetChar, loc)
@@ -130,7 +130,7 @@ function commands.handleBring(state, rest)
                 local targetChar = targetPC and targetPC.Pawn
                 
                 if targetChar and targetChar:IsValid() then
-                    local palUtility = StaticFindObject("/Script/Pal.Default__PalUtility")
+                    local palUtility = utils.getPalUtilities()
                     if palUtility and palUtility:IsValid() then
                         local loc = {X = 0, Y = 0, Z = 0}
                         local ok = palUtility:TryGetHeadWorldPosition(adminChar, loc)
@@ -159,7 +159,7 @@ function commands.handleBringAll(state, rest)
         return
     end
 
-    local palUtility = StaticFindObject("/Script/Pal.Default__PalUtility")
+    local palUtility = utils.getPalUtilities()
     if not palUtility or not palUtility:IsValid() then
         utils.sendPersonalAnnounce(pc, "PalUtility not ready yet.")
         return
