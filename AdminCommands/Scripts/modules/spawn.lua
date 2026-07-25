@@ -5,6 +5,79 @@ local utils = require("libs/utils")
 local logger = require("libs/logger")
 local commands = {}
 
+local pendingShinyHandles = {}
+local pendingShinyInits = 0
+
+local function configureSpawnedPal(handle, shiny, attempt)
+    if not handle or not handle:IsValid() then return end
+
+    local parameter = handle:TryGetIndividualParameter()
+    local actor = handle:TryGetIndividualActor()
+    local param_ok = parameter and parameter:IsValid()
+    local actor_ok = actor and actor:IsValid()
+
+    if (not param_ok or not actor_ok) and attempt < 5 then
+        ExecuteWithDelay(250, function()
+            configureSpawnedPal(handle, shiny, attempt + 1)
+        end)
+        return
+    end
+
+    if param_ok then
+        pcall(function()
+            parameter.bIsUncapturable = false
+            parameter.bIsForceCapturable = true
+            if shiny then
+                parameter.SaveParameter.IsRarePal = true
+                parameter.SaveParameterMirror.IsRarePal = true
+
+                local list_ok, passive_list = pcall(function() return parameter:GetPassiveSkillList() end)
+                local has_rare = false
+                if list_ok and type(passive_list) == "table" then
+                    for _, passive_id in ipairs(passive_list) do
+                        if tostring(passive_id) == "Rare" then has_rare = true end
+                    end
+                end
+                if not has_rare then
+                    pcall(function()
+                        parameter:AddPassiveSkill(FName("Rare"), FName("None"))
+                    end)
+                end
+
+                parameter:OnRep_SaveParameter()
+            end
+        end)
+    end
+
+    if actor_ok then
+        pcall(function()
+            local static_param = actor.StaticCharacterParameterComponent
+            if static_param and static_param:IsValid() then
+                static_param.IsUncapturable = false
+                static_param:SetSpawnedCharacterType(shiny and 1 or 0)
+            end
+
+            if shiny then
+                local base_scale = actor:GetActorScale3D()
+                actor:SetActorScale3D({
+                    X = base_scale.X * 1.5,
+                    Y = base_scale.Y * 1.5,
+                    Z = base_scale.Z * 1.5,
+                })
+                ExecuteWithDelay(1000, function()
+                    if actor and actor:IsValid() then
+                        actor:SetActorScale3D({ X = 1.5, Y = 1.5, Z = 1.5 })
+                    end
+                end)
+                local status = actor.StatusComponent
+                if status and status:IsValid() then
+                    status:AddStatus(32)
+                end
+            end
+        end)
+    end
+end
+
 function commands.handleSpawn(state, rest)
     local pc = state:GetPlayerController()
     if not rest or rest == "" then
@@ -61,39 +134,21 @@ function commands.handleSpawn(state, rest)
         Squad = nil,
     }
 
+    if shiny then pendingShinyInits = pendingShinyInits + 1 end
+
     local handle = npc_manager:SpawnNPCForServer(spawn_info, nil)
     if not handle or not handle:IsValid() then
         utils.sendPersonalAnnounce(pc, "Spawn failed.")
         return
     end
 
+    if shiny then
+        table.insert(pendingShinyHandles, handle)
+        ExecuteWithDelay(500, function() pendingShinyInits = 0 end)
+    end
+
     ExecuteWithDelay(500, function()
-        local parameter = handle:TryGetIndividualParameter()
-        if parameter and parameter:IsValid() then
-            if shiny then
-                parameter.SaveParameter.IsRarePal = true
-                parameter.SaveParameterMirror.IsRarePal = true
-            end
-            
-            parameter:OnRep_SaveParameter()
-            
-            local actor = handle:TryGetIndividualActor()
-            if actor and actor:IsValid() then
-                local static_param = actor.StaticCharacterParameterComponent
-                if static_param and static_param:IsValid() and shiny then
-                    static_param:SetSpawnedCharacterType(1)
-                end
-                
-                if shiny then
-                    actor:SetActorScale3D({ X = 1.5, Y = 1.5, Z = 1.5 })
-                    
-                    local status = actor.StatusComponent
-                    if status and status:IsValid() then
-                        status:AddStatus(32)
-                    end
-                end
-            end
-        end
+        configureSpawnedPal(handle, shiny, 1)
     end)
 
     local playerName = utils.GetPlayerName(state)
@@ -160,45 +215,21 @@ function commands.handleCatch(state, rest)
         Squad = nil,
     }
 
+    if shiny then pendingShinyInits = pendingShinyInits + 1 end
+
     local handle = npc_manager:SpawnNPCForServer(spawn_info, nil)
     if not handle or not handle:IsValid() then
         utils.sendPersonalAnnounce(pc, "Spawn failed.")
         return
     end
 
+    if shiny then
+        table.insert(pendingShinyHandles, handle)
+        ExecuteWithDelay(500, function() pendingShinyInits = 0 end)
+    end
+
     ExecuteWithDelay(500, function()
-        local parameter = handle:TryGetIndividualParameter()
-        if parameter and parameter:IsValid() then
-            parameter.bIsUncapturable = false
-            parameter.bIsForceCapturable = true
-            
-            if shiny then
-                parameter.SaveParameter.IsRarePal = true
-                parameter.SaveParameterMirror.IsRarePal = true
-            end
-            
-            parameter:OnRep_SaveParameter()
-            
-            local actor = handle:TryGetIndividualActor()
-            if actor and actor:IsValid() then
-                local static_param = actor.StaticCharacterParameterComponent
-                if static_param and static_param:IsValid() then
-                    static_param.IsUncapturable = false
-                    if shiny then
-                        static_param:SetSpawnedCharacterType(1)
-                    end
-                end
-                
-                if shiny then
-                    actor:SetActorScale3D({ X = 1.5, Y = 1.5, Z = 1.5 })
-                    
-                    local status = actor.StatusComponent
-                    if status and status:IsValid() then
-                        status:AddStatus(32)
-                    end
-                end
-            end
-        end
+        configureSpawnedPal(handle, shiny, 1)
     end)
 
     local captured = 0
@@ -226,6 +257,40 @@ function commands.handleCatch(state, rest)
 
     local label = (shiny and "shiny " or "") .. asset
     utils.sendPersonalAnnounce(pc, string.format("Spawned %s (Lv %d) and captured.", label, level))
+end
+
+function commands.onNpcSpawnCallback()
+    for i = #pendingShinyHandles, 1, -1 do
+        local handle = pendingShinyHandles[i]
+        if not handle or not handle:IsValid() then
+            table.remove(pendingShinyHandles, i)
+        else
+            local parameter = handle:TryGetIndividualParameter()
+            if parameter and parameter:IsValid() then
+                pcall(function()
+                    parameter.bIsUncapturable = false
+                    parameter.bIsForceCapturable = true
+                    parameter.SaveParameter.IsRarePal = true
+                    parameter.SaveParameterMirror.IsRarePal = true
+                    parameter:OnRep_SaveParameter()
+                end)
+                table.remove(pendingShinyHandles, i)
+            end
+        end
+    end
+end
+
+function commands.onCharacterParamInit(componentParam)
+    if pendingShinyInits < 1 then return end
+    if not componentParam or not componentParam:IsValid() then return end
+    local parameter = componentParam.IndividualParameter
+    if not parameter or not parameter:IsValid() then return end
+    pendingShinyInits = pendingShinyInits - 1
+    pcall(function()
+        parameter.SaveParameter.IsRarePal = true
+        parameter.SaveParameterMirror.IsRarePal = true
+        parameter:OnRep_SaveParameter()
+    end)
 end
 
 return commands

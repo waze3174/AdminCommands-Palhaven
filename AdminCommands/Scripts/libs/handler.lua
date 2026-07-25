@@ -11,6 +11,7 @@ local commandHandlers = {
     ban = { admin = true, func = admin.handleBan },
     unban = { admin = true, func = admin.handleUnban },
     kick = { admin = true, func = admin.handleKick },
+    slay = { admin = true, func = admin.handleSlay },
     fly = { admin = true, func = fly.handleFly },
     ["goto"] = { admin = true, func = teleport.handleGoto },
     getpos = {
@@ -63,7 +64,7 @@ local commandHandlers = {
                 "!give Player item:amount | !giveme item:amount | !catch Pal Level [shiny] | !spawn Pal Level [shiny] | " ..
                 "!fly enable/disable | !freeze Player | !unfreeze Player | !announce msg | !settime 0-23 | " ..
                 "!goto x,y,z | !goto Player | !getpos [Player] | !time | !unstuck | " ..
-                "!ban Player reason | !unban Player | !kick Player | !bring Player | !bringall"
+                "!ban Player reason | !unban Player | !kick Player | !slay Player | !bring Player | !bringall"
             )
         end
     },

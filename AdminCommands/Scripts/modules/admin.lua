@@ -99,4 +99,31 @@ function commands.handleKick(state, rest)
     utils.sendPersonalAnnounce(pc, "Player not found.")
 end
 
+function commands.handleSlay(state, rest)
+    local pc = state:GetPlayerController()
+    if not rest or rest == "" then
+        utils.sendPersonalAnnounce(pc, "Usage: !slay <player>")
+        return
+    end
+
+    local targetName = rest:lower()
+    for _, targetState in ipairs(FindAllOf("PalPlayerState") or {}) do
+        if targetState and targetState:IsValid() then
+            local name = utils.GetPlayerName(targetState)
+            if name:lower() == targetName then
+                local controller = targetState:GetPlayerController()
+                if controller and controller:IsValid() then
+                    controller:SelfKillPlayer()
+                    utils.sendPersonalAnnounce(pc, rest .. " has been killed.")
+                else
+                    utils.sendPersonalAnnounce(pc, "Could not find valid controller.")
+                end
+                return
+            end
+        end
+    end
+
+    utils.sendPersonalAnnounce(pc, "Player not found.")
+end
+
 return commands

@@ -1,4 +1,5 @@
 local utils = require("libs/utils")
+local config = require("config/config")
 local commands = {}
 
 function commands.handleSetTime(state, rest)
@@ -44,8 +45,26 @@ function commands.handleAnnounce(state, rest)
         return
     end
 
-    utils.sendServerAnnounce(rest)
+    utils.BroadcastServerMessage(rest)
     utils.sendPersonalAnnounce(pc, "Announced server wide message.")
+end
+
+if config.broadcastEnabled then
+    local function autoBroadcast()
+        if not config.broadcastMessage or config.broadcastMessage == "" then
+            return
+        end
+
+        if config.broadcastType == "system" then
+            utils.sendServerAnnounce(config.broadcastMessage)
+        elseif config.broadcastType == "notice" then
+            utils.BroadcastServerMessage(config.broadcastMessage)
+        end
+
+        ExecuteWithDelay(config.broadcastIntervalMinutes * 60 * 1000, autoBroadcast)
+    end
+
+    ExecuteWithDelay(config.broadcastIntervalMinutes * 60 * 1000, autoBroadcast)
 end
 
 return commands

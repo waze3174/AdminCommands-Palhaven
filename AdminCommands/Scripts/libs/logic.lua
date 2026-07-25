@@ -53,6 +53,14 @@ function logic.onCharacterInit(ctx)
             pc:ClientTravelInternal("Void", 0, false, nil)
         end
     end
+    if config.motdEnabled then
+        local pc = ps:GetPlayerController()
+        if pc and pc:IsValid() then
+            local name = ps.PlayerNamePrivate and ps.PlayerNamePrivate:ToString() or "Player"
+            local msg = string.format(config.motdMessage, name)
+            utils.sendPersonalAnnounce(pc, msg)
+        end
+    end
 end
 
 return logic

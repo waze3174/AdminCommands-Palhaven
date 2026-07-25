@@ -22,6 +22,13 @@ function utils.sendPersonalAnnounce(PalPlayerController, Message)
 end
 
 function utils.sendServerAnnounce(message)
+    local world = FindFirstOf("World")
+    if PalUtilities and PalUtilities:IsValid() and world and world:IsValid() then
+        PalUtilities:SendSystemAnnounce(world, message)
+    end
+end
+
+function utils.BroadcastServerMessage(message)
     local gameStateInstance = FindFirstOf("PalGameStateInGame")
     if gameStateInstance and gameStateInstance:IsValid() then
         gameStateInstance:BroadcastServerNotice(message)
