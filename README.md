@@ -15,6 +15,7 @@ For setup guides and usage examples, see the [GUIDES](GUIDES.md).
 | `!ban` | `!ban <player> [reason]` | Bans a player from the server and disconnects them. |
 | `!unban` | `!unban <UID>` | Removes a player UID from the ban list. |
 | `!kick` | `!kick <player> [reason]` | Kicks a player from the server. |
+| `!slay` | `!slay <player>` | Kills a player. |
 | `!fly` | `!fly enable` / `!fly disable` | Toggles fly mode for yourself. |
 | `!goto` | `!goto <x> <y> <z>` or `!goto <player>` | Teleports you to coordinates or to another player. |
 | `!getpos` | `!getpos` or `!getpos <player>` | Shows your current position or another player's position. |
