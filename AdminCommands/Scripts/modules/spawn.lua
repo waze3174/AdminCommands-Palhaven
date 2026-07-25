@@ -81,14 +81,14 @@ end
 function commands.handleSpawn(state, rest)
     local pc = state:GetPlayerController()
     if not rest or rest == "" then
-        utils.sendPersonalAnnounce(pc, "Usage: !spawn <PalName> <level> [shiny]")
+        utils.sendPersonalAnnounce(pc, "Usage: !spawn <PalName> <level> [shiny] [x,y,z]")
         return
     end
 
-    local asset, level_str, shiny_str = rest:match("^(%S+)%s+(%d+)%s*(%S*)$")
+    local asset, level_str, shiny_str, coords_str = rest:match("^(%S+)%s+(%d+)%s*(%S*)%s*(.*)$")
     
     if not asset or not level_str then
-        utils.sendPersonalAnnounce(pc, "Usage: !spawn <PalName> <level> [shiny]")
+        utils.sendPersonalAnnounce(pc, "Usage: !spawn <PalName> <level> [shiny] [x,y,z]")
         return
     end
 
@@ -124,12 +124,25 @@ function commands.handleSpawn(state, rest)
         return
     end
 
-    local location = playerChar:K2_GetActorLocation()
+    local spawnLocation
+    if coords_str and coords_str ~= "" then
+        local x, y, z = coords_str:match("^([%-%d%.]+),%s*([%-%d%.]+),%s*([%-%d%.]+)$")
+        if x and y and z then
+            spawnLocation = { X = tonumber(x), Y = tonumber(y), Z = tonumber(z) }
+        else
+            utils.sendPersonalAnnounce(pc, "Invalid coordinates. Use format: x,y,z")
+            return
+        end
+    else
+        local location = playerChar:K2_GetActorLocation()
+        spawnLocation = { X = location.X + 300, Y = location.Y, Z = location.Z + 100 }
+    end
+
     local spawn_info = {
         ControllerClass = controller_class,
         CharacterID = FName(asset),
         Level = level,
-        Location = { X = location.X + 300, Y = location.Y, Z = location.Z + 100 },
+        Location = spawnLocation,
         Yaw = 0.0,
         Squad = nil,
     }
@@ -162,14 +175,14 @@ end
 function commands.handleCatch(state, rest)
     local pc = state:GetPlayerController()
     if not rest or rest == "" then
-        utils.sendPersonalAnnounce(pc, "Usage: !catch <PalName> <level> [shiny]")
+        utils.sendPersonalAnnounce(pc, "Usage: !catch <PalName> <level> [shiny] [x,y,z]")
         return
     end
 
-    local asset, level_str, shiny_str = rest:match("^(%S+)%s+(%d+)%s*(%S*)$")
+    local asset, level_str, shiny_str, coords_str = rest:match("^(%S+)%s+(%d+)%s*(%S*)%s*(.*)$")
     
     if not asset or not level_str then
-        utils.sendPersonalAnnounce(pc, "Usage: !catch <PalName> <level> [shiny]")
+        utils.sendPersonalAnnounce(pc, "Usage: !catch <PalName> <level> [shiny] [x,y,z]")
         return
     end
 
@@ -205,12 +218,25 @@ function commands.handleCatch(state, rest)
         return
     end
 
-    local location = playerChar:K2_GetActorLocation()
+    local spawnLocation
+    if coords_str and coords_str ~= "" then
+        local x, y, z = coords_str:match("^([%-%d%.]+),%s*([%-%d%.]+),%s*([%-%d%.]+)$")
+        if x and y and z then
+            spawnLocation = { X = tonumber(x), Y = tonumber(y), Z = tonumber(z) }
+        else
+            utils.sendPersonalAnnounce(pc, "Invalid coordinates. Use format: x,y,z")
+            return
+        end
+    else
+        local location = playerChar:K2_GetActorLocation()
+        spawnLocation = { X = location.X + 300, Y = location.Y, Z = location.Z + 100 }
+    end
+
     local spawn_info = {
         ControllerClass = controller_class,
         CharacterID = FName(asset),
         Level = level,
-        Location = { X = location.X + 300, Y = location.Y, Z = location.Z + 100 },
+        Location = spawnLocation,
         Yaw = 0.0,
         Squad = nil,
     }
