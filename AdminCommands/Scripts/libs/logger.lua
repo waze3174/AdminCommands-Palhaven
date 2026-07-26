@@ -3,7 +3,9 @@ local logger = {}
 
 local ModDirectory = debug.getinfo(1, "S").source:match([[^@?(.*[\/])[^\/]-$]]):match("^(.+[/\\])[^/\\]+[/\\]$")
 local log_folder = ModDirectory .. "logs"
+local server_log_folder = log_folder .. "/serverlogs"
 os.execute("mkdir \"" .. log_folder .. "\"")
+os.execute("mkdir \"" .. server_log_folder .. "\"")
 
 local function GetCurrentTimestamp()
     return os.date("%Y-%m-%d %H:%M:%S")
@@ -15,6 +17,44 @@ function logger.logToFile(filename, line)
         fileHandler:write(string.format("[%s] %s\n", GetCurrentTimestamp(), line))
         fileHandler:close()
     end
+end
+
+function logger.logToServerFile(filename, line)
+    local fileHandler = io.open(server_log_folder .. "/" .. filename, "a")
+    if fileHandler then
+        fileHandler:write(string.format("[%s] %s\n", GetCurrentTimestamp(), line))
+        fileHandler:close()
+    end
+end
+
+function logger.logChat(playerName, playerUID, category, message)
+    local logLine = string.format("[%s] %s [%s]: %s", category, playerName, playerUID, message)
+    logger.logToServerFile("chat.txt", logLine)
+end
+
+function logger.logDeath(victimName, victimUID, attackerName, attackerUID)
+    local logLine
+    if attackerName then
+        logLine = string.format("%s [%s] was killed by %s [%s]", victimName, victimUID or "UnknownID", attackerName, attackerUID or "UnknownID")
+    else
+        logLine = string.format("%s [%s] died", victimName, victimUID or "UnknownID")
+    end
+    logger.logToServerFile("deaths.txt", logLine)
+end
+
+function logger.logConnect(playerName, playerUID)
+    local logLine = string.format("%s [%s] has connected.", playerName, playerUID)
+    logger.logToServerFile("connections.txt", logLine)
+end
+
+function logger.logDisconnect(playerName, playerUID)
+    local logLine = string.format("%s [%s] has disconnected.", playerName, playerUID)
+    logger.logToServerFile("connections.txt", logLine)
+end
+
+function logger.logCapture(playerName, playerUID, palName)
+    local logLine = string.format("%s [%s] captured %s.", playerName, playerUID, palName)
+    logger.logToServerFile("captures.txt", logLine)
 end
 
 function logger.logCommand(playerName, playerUID, command, args)

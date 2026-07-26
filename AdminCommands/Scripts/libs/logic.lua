@@ -3,6 +3,7 @@ local bans = require("libs/bans")
 local utils = require("libs/utils")
 local logger = require("libs/logger")
 local config = require("config/config")
+local serverlogs = require("libs/serverlogs")
 local logic = {}
 
 for k in pairs(commandHandlers) do
@@ -13,6 +14,8 @@ function logic.chatHook(ctx, Message, Category)
     local text = Message:get():ToString()
     local pc = ctx:get()
     local state = pc.PlayerState
+
+    serverlogs.ChatLog(state, text, Category:get())
 
     local prefixPattern = config.commandPrefix:gsub("([%^%$%(%)%%%.%[%]%*%+%-%?])", "%%%1")
     local cmd, rest = text:match("^" .. prefixPattern .. "(%S+)%s*(.*)$")
@@ -46,6 +49,9 @@ function logic.onCharacterInit(ctx)
     if not (ps and ps:IsValid()) then
         return ExecuteWithDelay(50, function() logic.onCharacterInit(ctx) end)
     end
+
+    serverlogs.ConnectLog(character)
+
     local uid = utils.GetPlayerId(ps)
     if bans.isUidBanned(uid) then
         local pc = ps:GetPlayerController()
