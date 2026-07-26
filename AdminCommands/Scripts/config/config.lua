@@ -21,4 +21,19 @@ config.adminUIDs = {
     "12345678000000000000000000000000"
 }
 
+-- Logging Settings
+-- Toggle individual log categories on or off. Set to false to disable.
+config.logging = {
+    chat = true,
+    death = true,
+    connect = true,
+    disconnect = true,
+    capture = true,
+    command = true,
+    ban = true,
+    kick = true,
+    teleport = true,
+    spawn = true,
+}
+
 return config
