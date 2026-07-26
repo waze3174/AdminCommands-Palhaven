@@ -27,6 +27,11 @@ Example of spawning a level 10 Depresso:
 !spawn NegativeKoala 10
 ```
 
+Example of spawning a level 10 Shiny Depresso:
+```
+!spawn NegativeKoala 10 true
+```
+
 Example of auto catching level 15 Kingpaca Cryst:
 ```
 !catch KingAlpaca_Ice 15

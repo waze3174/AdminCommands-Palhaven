@@ -21,7 +21,7 @@ For setup guides and usage examples, see the [GUIDES](GUIDES.md).
 | `!getpos` | `!getpos` or `!getpos <player>` | Shows your current position or another player's position. |
 | `!bring` | `!bring <player>` | Teleports a player to your location. |
 | `!bringall` | `!bringall` | Teleports all other players to your location. |
-| `!spawn` | `!spawn <PalAsset> <level> [shiny]` | Spawns a Pal near you at the given level. Pass `true` for shiny. |
+| `!spawn` | `!spawn <PalAsset> <level> [shiny] [x,y,z]` | Spawns a Pal near you or at specific coordinates. Pass `true` for shiny. |
 | `!catch` | `!catch <PalAsset> <level> [shiny]` | Spawns a Pal and automatically captures it. Pass `true` for shiny. |
 | `!give` | `!give <player> <ItemAsset>:<amount> <ItemAsset2>:<amount>` | Gives items to a target player. If no player name is given, gives to yourself. |
 | `!giveme` | `!giveme <ItemAsset>:<amount> <ItemAsset2>:<amount>` | Gives items directly to yourself. |
@@ -30,6 +30,10 @@ For setup guides and usage examples, see the [GUIDES](GUIDES.md).
 | `!unfreeze` | `!unfreeze <player>` | Unfreezes a previously frozen player. |
 | `!settime` | `!settime <hour>` | Sets the in-game time (0–23). |
 | `!announce` | `!announce <message>` | Broadcasts a server-wide announcement to all players. |
+| `!god` | `!god on` / `!god off` | Toggles invincibility for yourself. |
+| `!destroybase` | `!destroybase <x,y,z>` | Destroys a base camp near the given coordinates. |
+| `!destroynearestbase` | `!destroynearestbase` | Destroys the nearest base camp to your location. |
+| `!admingun` | `!admingun on` / `!admingun off` | Toggles Admin Gun mode. Shoot a palbox to destroy its base camp. |
 
 ### Player Commands
 | Command | Usage | Description |
