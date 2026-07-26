@@ -6,6 +6,7 @@ local freeze = require("modules/freeze")
 local server = require("modules/server")
 local items = require("modules/items")
 local basecamp = require("modules/basecamp")
+local godmode = require("modules/godmode")
 local utils = require("libs/utils")
 
 local commandHandlers = {
@@ -59,6 +60,7 @@ local commandHandlers = {
     destroybase = { admin = true, func = basecamp.handleDestroyBase },
     destroynearestbase = { admin = true, func = basecamp.handleDestroyNearestBase },
     admingun = { admin = true, func = basecamp.handleAdminGun },
+    god = { admin = true, func = godmode.handleGodMode },
     time = { admin = false, func = server.handleCurrentTime },
     help = {
         admin = false,
@@ -69,7 +71,7 @@ local commandHandlers = {
                 "!fly enable/disable | !freeze Player | !unfreeze Player | !announce msg | !settime 0-23 | " ..
                 "!goto x,y,z | !goto Player | !getpos [Player] | !time | !unstuck | " ..
                 "!ban Player reason | !unban Player | !kick Player | !slay Player | !bring Player | !bringall | " ..
-                "!destroybase x,y,z | !destroynearestbase | !admingun on/off"
+                "!destroybase x,y,z | !destroynearestbase | !admingun on/off | !god on/off"
             )
         end
     },

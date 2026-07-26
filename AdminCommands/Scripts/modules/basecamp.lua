@@ -134,20 +134,24 @@ function commands.handleAdminGun(state, rest)
     local uid = utils.GetPlayerId(state)
     if not uid then return end
 
+    local enable = nil
     if rest and rest:lower() == "on" then
-        adminGunEnabled[uid] = true
-        utils.sendPersonalAnnounce(pc, "Admin Gun: ON - Shoot any Palbox to destroy it.")
+        enable = true
     elseif rest and rest:lower() == "off" then
-        adminGunEnabled[uid] = nil
-        utils.sendPersonalAnnounce(pc, "Admin Gun: OFF")
+        enable = false
+    elseif not rest or rest == "" then
+        enable = not adminGunEnabled[uid]
     else
-        if adminGunEnabled[uid] then
-            adminGunEnabled[uid] = nil
-            utils.sendPersonalAnnounce(pc, "Admin Gun: OFF")
-        else
-            adminGunEnabled[uid] = true
-            utils.sendPersonalAnnounce(pc, "Admin Gun: ON - Shoot any Palbox to destroy it.")
-        end
+        utils.sendPersonalAnnounce(pc, "Usage: !admingun on/off")
+        return
+    end
+
+    if enable then
+        adminGunEnabled[uid] = true
+        utils.sendPersonalAnnounce(pc, "Admin Gun enabled! Shoot any Palbox to destroy it.")
+    else
+        adminGunEnabled[uid] = nil
+        utils.sendPersonalAnnounce(pc, "Admin Gun disabled!")
     end
 end
 
