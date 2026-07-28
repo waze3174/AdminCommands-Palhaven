@@ -50,3 +50,14 @@ Example of giving yourself Advanced Shield and 10 Baked Berries.
 ```
 !give Baked_Berries:10 Shield_SF:1
 ```
+
+## How to change command prefix to silence commands?
+By default the commands use `"!"` as the prefix. You can change this in the `config/config.lua` file.
+
+ > [!WARNING]  
+ > Command prefix being set to `"/"` will return back a `Unknown command.` error. This cannot be fixed without C++.
+
+Setting the prefix to `"/"` will silence the commands in the chat.
+```
+config.commandPrefix = "/"
+```
