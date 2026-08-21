@@ -74,7 +74,7 @@ local commandHandlers = {
                 "!give Player item:amount | !giveme item:amount | !catch Pal Level [shiny] | !spawn Pal Level [shiny] | " ..
                 "!fly enable/disable | !freeze Player | !unfreeze Player | !announce msg | !settime 0-23 | " ..
                 "!goto x,y,z | !goto Player | !getpos [Player] | !time | !unstuck | " ..
-                "!ban Player reason | !unban Player | !kick Player | !slay Player | !bring Player | !bringall | " ..
+                "!ban Player reason | !unban Player-or-UID | !kick Player | !slay Player | !bring Player | !bringall | " ..
                 "!destroybase x,y,z | !destroynearestbase | !destroyatcrosshair"
             )
         end

@@ -50,4 +50,22 @@ function bans.getBans()
 	return BANS
 end
 
+-- Returns a list of {uid=, name=, reason=} entries whose recorded name
+-- matches (case-insensitive). Ban records already store name alongside UID
+-- (see banUid above), so this needs no extra data -- just search what's
+-- already persisted. Supports !unban <name> as an alternative to
+-- !unban <UID>, since a banned player can't be looked up live (they're not
+-- connected), UID is the only thing that's ever unambiguous.
+function bans.findByName(name)
+	if not name or name == "" then return {} end
+	local lowerName = name:lower()
+	local matches = {}
+	for uid, entry in pairs(BANS) do
+		if entry.name and entry.name:lower() == lowerName then
+			table.insert(matches, entry)
+		end
+	end
+	return matches
+end
+
 return bans

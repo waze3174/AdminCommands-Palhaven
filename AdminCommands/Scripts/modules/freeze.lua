@@ -1,3 +1,11 @@
+-- FIX 2026-08-21: freeze/unfreeze previously looped FindAllOf("PalPlayerState"),
+-- confirmed non-functional on this Linux port -- silently reporting
+-- "Player not found" every time. Replaced with utils.FindPlayerByName (same
+-- mechanism as items.lua's by-name !give/!exp). Bonus fix alongside
+-- ban/kick/slay/goto/getpos/bring since it's the identical root cause and a
+-- mechanical swap -- not a request to un-deprecate these commands if they've
+-- been intentionally excluded elsewhere.
+
 local utils = require("libs/utils")
 local commands = {}
 
@@ -11,34 +19,28 @@ function commands.handleFreeze(state, rest)
     end
 
     local targetName = rest:match("^%s*(.-)%s*$")
-    for _, targetState in ipairs(FindAllOf("PalPlayerState") or {}) do
-        if targetState and targetState:IsValid() then
-            local name = utils.GetPlayerName(targetState)
-            if name:lower() == targetName:lower() then
-                local targetPC = targetState:GetPlayerController()
-                local targetChar = targetPC and targetPC.Pawn
-                
-                if targetChar and targetChar:IsValid() then
-                    local movement = targetChar:GetPalCharacterMovementComponent()
-                    if movement and movement:IsValid() then
-                        local targetUID = utils.GetPlayerId(targetState)
-                        FROZEN[targetUID] = true
-                        
-                        movement:StopMovementImmediately()
-                        movement.bIsDisableInput = true
-                        movement.bIsDisableMovement = true
-                        movement.bIsDisableJump = true
-                        targetPC:SetIgnoreMoveInput(true)
-                        
-                        utils.sendPersonalAnnounce(pc, "Froze " .. name)
-                    end
-                end
-                return
-            end
-        end
+    local targetPC, targetState, name = utils.FindPlayerByName(targetName)
+    if not targetPC then
+        utils.sendPersonalAnnounce(pc, "Player not found.")
+        return
     end
 
-    utils.sendPersonalAnnounce(pc, "Player not found.")
+    local targetChar = targetPC.Pawn
+    if targetChar and targetChar:IsValid() then
+        local movement = targetChar:GetPalCharacterMovementComponent()
+        if movement and movement:IsValid() then
+            local targetUID = utils.GetPlayerId(targetState)
+            FROZEN[targetUID] = true
+
+            movement:StopMovementImmediately()
+            movement.bIsDisableInput = true
+            movement.bIsDisableMovement = true
+            movement.bIsDisableJump = true
+            targetPC:SetIgnoreMoveInput(true)
+
+            utils.sendPersonalAnnounce(pc, "Froze " .. name)
+        end
+    end
 end
 
 function commands.handleUnfreeze(state, rest)
@@ -49,34 +51,28 @@ function commands.handleUnfreeze(state, rest)
     end
 
     local targetName = rest:match("^%s*(.-)%s*$")
-    for _, targetState in ipairs(FindAllOf("PalPlayerState") or {}) do
-        if targetState and targetState:IsValid() then
-            local name = utils.GetPlayerName(targetState)
-            if name:lower() == targetName:lower() then
-                local targetPC = targetState:GetPlayerController()
-                local targetChar = targetPC and targetPC.Pawn
-                
-                if targetChar and targetChar:IsValid() then
-                    local movement = targetChar:GetPalCharacterMovementComponent()
-                    if movement and movement:IsValid() then
-                        local targetUID = utils.GetPlayerId(targetState)
-                        FROZEN[targetUID] = nil
-                        
-                        movement.bIsDisableInput = false
-                        movement.bIsDisableMovement = false
-                        movement.bIsDisableJump = false
-                        movement:SetMovementMode(1, 0)
-                        targetPC:ResetIgnoreMoveInput()
-                        
-                        utils.sendPersonalAnnounce(pc, "Unfroze " .. name)
-                    end
-                end
-                return
-            end
-        end
+    local targetPC, targetState, name = utils.FindPlayerByName(targetName)
+    if not targetPC then
+        utils.sendPersonalAnnounce(pc, "Player not found.")
+        return
     end
 
-    utils.sendPersonalAnnounce(pc, "Player not found.")
+    local targetChar = targetPC.Pawn
+    if targetChar and targetChar:IsValid() then
+        local movement = targetChar:GetPalCharacterMovementComponent()
+        if movement and movement:IsValid() then
+            local targetUID = utils.GetPlayerId(targetState)
+            FROZEN[targetUID] = nil
+
+            movement.bIsDisableInput = false
+            movement.bIsDisableMovement = false
+            movement.bIsDisableJump = false
+            movement:SetMovementMode(1, 0)
+            targetPC:ResetIgnoreMoveInput()
+
+            utils.sendPersonalAnnounce(pc, "Unfroze " .. name)
+        end
+    end
 end
 
 return commands

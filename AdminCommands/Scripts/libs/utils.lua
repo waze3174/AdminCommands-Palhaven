@@ -74,4 +74,52 @@ function utils.getPalUtilities()
     return PalUtilities
 end
 
+-- FIX 2026-08-21: FindAllOf("PalPlayerState") is confirmed non-functional on
+-- this Linux port (returns bare nil, see gameservers.md bug class 3 from the
+-- destroybase investigation) -- every command that looped it to find a
+-- connected player by name was silently matching nobody, every time. This
+-- uses the same enumeration mechanism items.lua's by-name !give/!exp already
+-- rely on successfully in production: GetPlayerListDisplayMessages +
+-- GetPlayerCharacterByPlayerIndex, not a global class search.
+function utils.GetAllPlayers()
+    local players = {}
+    local palUtility = utils.getPalUtilities()
+    local world = FindFirstOf("World")
+    if not palUtility or not palUtility:IsValid() or not world or not world:IsValid() then
+        return players
+    end
+
+    local playerList = palUtility:GetPlayerListDisplayMessages(world)
+    if not playerList then return players end
+
+    for i = 1, #playerList do
+        local info = playerList[i]:get():ToString()
+        local name = info:match("^(.-),")
+        if name then
+            local playerChar = palUtility:GetPlayerCharacterByPlayerIndex(world, i - 1)
+            if playerChar and playerChar:IsValid() then
+                local pc = playerChar:GetPalPlayerController()
+                if pc and pc:IsValid() then
+                    table.insert(players, { name = name, pc = pc, state = pc.PlayerState })
+                end
+            end
+        end
+    end
+
+    return players
+end
+
+-- Returns targetPC, targetState, actualName (as displayed) or nil if no
+-- connected player matches (case-insensitive, exact match).
+function utils.FindPlayerByName(targetName)
+    if not targetName or targetName == "" then return nil end
+    local lowerTarget = targetName:lower()
+    for _, player in ipairs(utils.GetAllPlayers()) do
+        if player.name:lower() == lowerTarget then
+            return player.pc, player.state, player.name
+        end
+    end
+    return nil
+end
+
 return utils
