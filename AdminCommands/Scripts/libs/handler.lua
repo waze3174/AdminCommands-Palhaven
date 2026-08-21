@@ -31,6 +31,7 @@ local commandHandlers = {
     catch = { admin = true, func = spawn.handleCatch },
     give = {
         admin = true,
+        consoleSafe = true,
         func = function(state, rest)
             if not rest or rest == "" or not rest:find(" ") then
                 items.handlePersonalGive(state, rest)
@@ -42,6 +43,7 @@ local commandHandlers = {
     giveme = { admin = true, func = items.handlePersonalGive },
     exp = {
         admin = true,
+        consoleSafe = true,
         func = function(state, rest)
             if not rest or rest == "" or not rest:find(" ") then
                 items.handlePersonalExp(state, rest)
@@ -53,8 +55,8 @@ local commandHandlers = {
     giveexp = { admin = true, func = items.handlePersonalExp },
     freeze = { admin = true, func = freeze.handleFreeze },
     unfreeze = { admin = true, func = freeze.handleUnfreeze },
-    settime = { admin = true, func = server.handleSetTime },
-    announce = { admin = true, func = server.handleAnnounce },
+    settime = { admin = true, consoleSafe = true, func = server.handleSetTime },
+    announce = { admin = true, consoleSafe = true, func = server.handleAnnounce },
     unstuck = { admin = false, func = teleport.handleUnstuck },
     destroybase = { admin = true, func = basecamp.handleDestroyBase },
     destroynearestbase = { admin = true, func = basecamp.handleDestroyNearestBase },

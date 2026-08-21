@@ -69,4 +69,43 @@ function logic.onCharacterInit(ctx)
     end
 end
 
+-- Console/RCON dispatch, ATTEMPT 1, REMOVED 2026-08-21: originally hooked
+-- ProcessConsoleExec via RegisterHook. Confirmed dead -- ProcessConsoleExec
+-- is not a reflected UFunction on this build, RegisterHook can never attach
+-- to it regardless of class path. Superseded by attempt 2 below
+-- (RegisterConsoleCommandHandler), a genuinely different mechanism.
+
+-- Console/RCON dispatch, ATTEMPT 2 (2026-08-21): the first attempt
+-- (hooking ProcessConsoleExec via RegisterHook) failed hard -- confirmed
+-- not a reflected UFunction on this build, see above. This uses
+-- a genuinely different mechanism: RegisterConsoleCommandHandler, a
+-- dedicated UE4SS Lua API for custom console commands (already used
+-- successfully by ConsoleCommandsMod, sitting in this server's own Mods
+-- folder). Backed by UE4SS's own internal raw-address hook on
+-- UObject::ProcessConsoleExec (confirmed in boot log), not tied to a
+-- GameViewport the way ConsoleEnablerMod's approach is (that one is
+-- confirmed dead on a dedicated server -- "GameViewport... is invalid").
+-- NOT YET LIVE-TESTED against actual RCON-delivered text -- plausible, not
+-- proven, until confirmed with a real command sent through the Pterodactyl
+-- console/Scheduler.
+--
+-- Note for usage: registered under the plain command name, no "!" prefix
+-- (that prefix is specific to the chat dispatch path) -- e.g. "announce
+-- hello" as the RCON/Scheduler payload, not "!announce hello".
+function logic.registerConsoleCommands()
+    for name, entry in pairs(commandHandlers) do
+        if entry.consoleSafe then
+            RegisterConsoleCommandHandler(name, function(FullCommand, Parameters, Ar)
+                local rest = table.concat(Parameters, " ")
+                logger.logCommand("[RCON]", "console", name, rest)
+                local ok, err = pcall(entry.func, nil, rest)
+                if not ok then
+                    logger.info("[console] command '" .. name .. "' errored: " .. tostring(err))
+                end
+                return true
+            end)
+        end
+    end
+end
+
 return logic

@@ -34,16 +34,16 @@ function commands.spawnItem(playerState, item)
 end
 
 function commands.handleGive(state, rest)
-    local pc = state:GetPlayerController()
+    local pc = state and state:GetPlayerController() or nil
     if not rest or rest == "" then
-        utils.sendPersonalAnnounce(pc, "Usage: !give <name> item:amount item2:amount")
+        if pc then utils.sendPersonalAnnounce(pc, "Usage: !give <name> item:amount item2:amount") end
         return
     end
 
     local palUtility = utils.getPalUtilities()
     local world = FindFirstOf("World")
     if not palUtility or not palUtility:IsValid() or not world or not world:IsValid() then
-        utils.sendPersonalAnnounce(pc, "PalUtility not ready yet.")
+        if pc then utils.sendPersonalAnnounce(pc, "PalUtility not ready yet.") end
         return
     end
     local playerList = palUtility:GetPlayerListDisplayMessages(world)
@@ -67,14 +67,21 @@ function commands.handleGive(state, rest)
         end
     end
 
-    if (not targetController or not remaining) and rest:find("%S+:%d+") then
+    -- Self-target fallback ("!give item:amount" with no name, meaning "give
+    -- me") only makes sense with a calling player -- not reachable from
+    -- console, where pc is nil.
+    if (not targetController or not remaining) and pc and rest:find("%S+:%d+") then
         targetController = pc
         targetName = "you"
         remaining = rest
     end
 
     if not targetController or not remaining then
-        utils.sendPersonalAnnounce(pc, "Player not found.")
+        if pc then
+            utils.sendPersonalAnnounce(pc, "Player not found.")
+        else
+            logger.info("[console] !give: player not found in '" .. rest .. "'")
+        end
         return
     end
 
@@ -82,14 +89,31 @@ function commands.handleGive(state, rest)
     for item in remaining:gmatch("%S+") do
         local success, itemName, qty = commands.spawnItem(targetState, item)
         if success then
-            utils.sendPersonalAnnounce(pc, string.format("Gave %d x %s to %s", qty, itemName, targetName))
+            local msg = string.format("Gave %d x %s to %s", qty, itemName, targetName)
+            if pc then
+                utils.sendPersonalAnnounce(pc, msg)
+            else
+                logger.info("[console] " .. msg)
+            end
         else
-            utils.sendPersonalAnnounce(pc, itemName)
+            if pc then
+                utils.sendPersonalAnnounce(pc, itemName)
+            else
+                logger.info("[console] !give failed: " .. tostring(itemName))
+            end
         end
     end
 end
 
 function commands.handlePersonalGive(state, rest)
+    if not state then
+        -- "!give item:amount" with no player name has no defined recipient
+        -- when there's no calling player (console/RCON) -- no-op rather
+        -- than error.
+        logger.info("[console] !give/!giveme called with no target player, ignored: " .. tostring(rest))
+        return
+    end
+
     local pc = state:GetPlayerController()
     if not rest or rest == "" then
         utils.sendPersonalAnnounce(pc, "Usage: !give item:amount item2:amount")
@@ -131,11 +155,10 @@ function commands.giveExperience(playerState, quantity)
 end
 
 function commands.handleExpCommand(state, rest)
-    local pc = state:GetPlayerController()
-    if not pc or not pc:IsValid() then return end
+    local pc = state and state:GetPlayerController() or nil
 
     if not rest or rest == "" then
-        utils.sendPersonalAnnounce(pc, "Usage: !exp <name> <amount>")
+        if pc then utils.sendPersonalAnnounce(pc, "Usage: !exp <name> <amount>") end
         return
     end
 
@@ -165,13 +188,17 @@ function commands.handleExpCommand(state, rest)
     end
 
     if not targetController or not remaining then
-        utils.sendPersonalAnnounce(pc, "Player not found.")
+        if pc then
+            utils.sendPersonalAnnounce(pc, "Player not found.")
+        else
+            logger.info("[console] !exp: player not found in '" .. rest .. "'")
+        end
         return
     end
 
     local amount = tonumber(remaining)
     if not amount then
-        utils.sendPersonalAnnounce(pc, "Invalid amount.")
+        if pc then utils.sendPersonalAnnounce(pc, "Invalid amount.") end
         return
     end
 
@@ -179,10 +206,20 @@ function commands.handleExpCommand(state, rest)
     if not targetState or not targetState:IsValid() then return end
 
     commands.giveExperience(targetState, amount)
-    utils.sendPersonalAnnounce(pc, string.format("Granted %d EXP to %s", amount, targetName))
+    local msg = string.format("Granted %d EXP to %s", amount, targetName)
+    if pc then
+        utils.sendPersonalAnnounce(pc, msg)
+    else
+        logger.info("[console] " .. msg)
+    end
 end
 
 function commands.handlePersonalExp(state, rest)
+    if not state then
+        logger.info("[console] !exp/!giveexp called with no target player, ignored: " .. tostring(rest))
+        return
+    end
+
     local pc = state:GetPlayerController()
     local amount = tonumber(rest)
     if not amount then

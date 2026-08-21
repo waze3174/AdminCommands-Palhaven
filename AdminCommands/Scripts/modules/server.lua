@@ -1,29 +1,34 @@
 local utils = require("libs/utils")
+local logger = require("libs/logger")
 local config = require("config/config")
 local commands = {}
 
 function commands.handleSetTime(state, rest)
-    local pc = state:GetPlayerController()
+    local pc = state and state:GetPlayerController() or nil
     if not rest or rest == "" then
-        utils.sendPersonalAnnounce(pc, "Usage: !settime <hour>")
+        if pc then utils.sendPersonalAnnounce(pc, "Usage: !settime <hour>") end
         return
     end
 
     local hour = tonumber(rest)
     if not hour or hour < 0 or hour > 23 then
-        utils.sendPersonalAnnounce(pc, "Invalid hour. Must be between 0 and 23.")
+        if pc then utils.sendPersonalAnnounce(pc, "Invalid hour. Must be between 0 and 23.") end
         return
     end
 
     local timeManager = FindFirstOf("PalTimeManager")
     if not timeManager or not timeManager:IsValid() then
-        utils.sendPersonalAnnounce(pc, "PalTimeManager not found.")
+        if pc then utils.sendPersonalAnnounce(pc, "PalTimeManager not found.") end
         return
     end
 
     timeManager:SetGameTime_FixDay(hour)
     local timeStr = timeManager:GetDebugTimeString():ToString()
-    utils.sendPersonalAnnounce(pc, "Game time set. Current time: " .. timeStr)
+    if pc then
+        utils.sendPersonalAnnounce(pc, "Game time set. Current time: " .. timeStr)
+    else
+        logger.info("[console] Game time set to hour " .. hour .. ". Current time: " .. timeStr)
+    end
 end
 
 function commands.handleCurrentTime(state)
@@ -39,14 +44,18 @@ function commands.handleCurrentTime(state)
 end
 
 function commands.handleAnnounce(state, rest)
-    local pc = state:GetPlayerController()
+    local pc = state and state:GetPlayerController() or nil
     if not rest or rest == "" then
-        utils.sendPersonalAnnounce(pc, "Usage: !announce <message>")
+        if pc then utils.sendPersonalAnnounce(pc, "Usage: !announce <message>") end
         return
     end
 
     utils.BroadcastServerMessage(rest)
-    utils.sendPersonalAnnounce(pc, "Announced server wide message.")
+    if pc then
+        utils.sendPersonalAnnounce(pc, "Announced server wide message.")
+    else
+        logger.info("[console] Announced: " .. rest)
+    end
 end
 
 if config.broadcastEnabled then
