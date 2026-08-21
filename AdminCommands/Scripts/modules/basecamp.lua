@@ -11,27 +11,138 @@ local function getBaseCampManager()
     return nil
 end
 
-local function destroyPalboxActor(campId)
-    local actors = FindAllOf("PalBuildObjectBaseCampPoint")
-    if not actors then return false end
-
-    for _, palbox in ipairs(actors) do
-        if palbox and palbox:IsValid() then
-            local matchOk, belongsTo = pcall(function() return palbox:GetBaseCampIdBelongTo() end)
-            if matchOk and belongsTo then
-                local guidOk, match = pcall(function()
-                    return belongsTo.A == campId.A and belongsTo.B == campId.B and
-                           belongsTo.C == campId.C and belongsTo.D == campId.D
-                end)
-                if guidOk and match then
-                    pcall(function() palbox:DisposeSelf_ServerInternal() end)
-                    return true
-                end
-            end
-        end
+local function guidToString(g)
+    if not g then return "nil" end
+    local okA, a = pcall(function() return g.A end)
+    local okB, b = pcall(function() return g.B end)
+    local okC, c = pcall(function() return g.C end)
+    local okD, d = pcall(function() return g.D end)
+    if not (okA and okB and okC and okD) then
+        return string.format("<unreadable A/B/C/D: okA=%s okB=%s okC=%s okD=%s>", tostring(okA), tostring(okB), tostring(okC), tostring(okD))
     end
-    return false
+    return string.format("%s-%s-%s-%s", tostring(a), tostring(b), tostring(c), tostring(d))
 end
+
+-- NEW APPROACH 2026-08-18: FindAllOf/FindFirstOf confirmed non-functional on
+-- this port for ANY class (native or Blueprint, including the trivial class
+-- 'Class' itself). Re-enabling OnHit for admingun confirmed a real crash
+-- risk from hooking Blueprint-overridden natives. This avoids BOTH: a
+-- direct line trace from the calling player's crosshair gets a real actor
+-- reference synchronously, with zero FindAllOf and zero OnHit hook
+-- involvement at all. Uses UEHelpers (bundled in Mods/shared/ with this
+-- port) for KismetSystemLibrary access -- a standard, well-precedented
+-- UE4SS pattern for other games, untested on this specific port until now.
+local UEHelpers = require("UEHelpers")
+
+local function traceForPalboxAtCrosshair(pc)
+    local ksl = UEHelpers.GetKismetSystemLibrary()
+    if not ksl or not ksl:IsValid() then
+        logger.info("DESTROYBASE_DEBUG traceForPalbox: KismetSystemLibrary not valid")
+        return nil
+    end
+
+    local camManager = pc.PlayerCameraManager
+    if not camManager or not camManager:IsValid() then
+        logger.info("DESTROYBASE_DEBUG traceForPalbox: PlayerCameraManager not valid")
+        return nil
+    end
+
+    local camLocOk, camLoc = pcall(function() return camManager:GetCameraLocation() end)
+    local camRotOk, camRot = pcall(function() return camManager:GetCameraRotation() end)
+    if not camLocOk or not camRotOk then
+        logger.info(string.format("DESTROYBASE_DEBUG traceForPalbox: camera loc/rot read failed (locOk=%s rotOk=%s)", tostring(camLocOk), tostring(camRotOk)))
+        return nil
+    end
+
+    local TRACE_DISTANCE = 1500.0
+    local yaw = math.rad(camRot.Yaw)
+    local pitch = math.rad(camRot.Pitch)
+    local forward = {
+        X = math.cos(pitch) * math.cos(yaw),
+        Y = math.cos(pitch) * math.sin(yaw),
+        Z = math.sin(pitch),
+    }
+    local endPoint = {
+        X = camLoc.X + forward.X * TRACE_DISTANCE,
+        Y = camLoc.Y + forward.Y * TRACE_DISTANCE,
+        Z = camLoc.Z + forward.Z * TRACE_DISTANCE,
+    }
+
+    -- TraceChannel 1 = ECC_Visibility (standard default); DrawDebugType 0 = none
+    -- UE4SS Lua convention: 'Out' reference parameters (OutHit here) must be
+    -- passed as a pre-existing table for the engine to write into -- passing
+    -- nil (as the first attempt did) errors with "no table was on the
+    -- stack". Declared outside the pcall so we can read it back afterward
+    -- (Lua tables are references, so the engine's writes are visible here).
+    local hitResult = {}
+    local traceOk, didHit = pcall(function()
+        return ksl:LineTraceSingle(pc, camLoc, endPoint, 1, false, {}, 0, hitResult, false,
+            { R = 1, G = 0, B = 0, A = 1 }, { R = 0, G = 1, B = 0, A = 1 }, 0)
+    end)
+    if not traceOk then
+        logger.info(string.format("DESTROYBASE_DEBUG traceForPalbox: LineTraceSingle errored: %s", tostring(didHit)))
+        return nil
+    end
+    if not didHit then
+        logger.info("DESTROYBASE_DEBUG traceForPalbox: trace found nothing in range")
+        return nil
+    end
+
+    -- Palworld runs UE 5.1 -- HitResult.HitObjectHandle.Actor:Get() per the
+    -- UE4SS version-branch convention (5.4+ uses ReferenceObject instead).
+    local actorOk, actor = pcall(function() return hitResult.HitObjectHandle.Actor:Get() end)
+    if not actorOk or not actor or not actor:IsValid() then
+        logger.info(string.format("DESTROYBASE_DEBUG traceForPalbox: actor extraction failed ok=%s", tostring(actorOk)))
+        return nil
+    end
+
+    local classOk, className = pcall(function() return actor:GetClass():GetFullName() end)
+    logger.info(string.format("DESTROYBASE_DEBUG traceForPalbox: hit actor class = %s", tostring(classOk and className or "<unresolved>")))
+
+    return actor
+end
+
+function commands.handleDestroyAtCrosshair(state)
+    local pc = state:GetPlayerController()
+    local actor = traceForPalboxAtCrosshair(pc)
+    if not actor then
+        utils.sendPersonalAnnounce(pc, "Nothing found at crosshair.")
+        return
+    end
+
+    local isPalbox = false
+    pcall(function() isPalbox = actor:IsA("/Script/Pal.PalBuildObjectBaseCampPoint") end)
+    if not isPalbox then
+        utils.sendPersonalAnnounce(pc, "That's not a palbox.")
+        return
+    end
+
+    local campIdOk, campId = pcall(function() return actor:GetBaseCampIdBelongTo() end)
+    if not campIdOk or not campId then
+        utils.sendPersonalAnnounce(pc, "Could not resolve base camp ID from that palbox.")
+        return
+    end
+
+    local disposeOk = pcall(function() actor:DisposeSelf_ServerInternal() end)
+    local manager = getBaseCampManager()
+    local dismantleOk = false
+    if manager and manager:IsValid() then
+        dismantleOk = pcall(function() manager:RequestDismantalDistanceBaseCamp(campId) end)
+    end
+
+    logger.info(string.format("DESTROYBASE_DEBUG traceForPalbox: disposeOk=%s dismantleOk=%s", tostring(disposeOk), tostring(dismantleOk)))
+
+    if disposeOk then
+        utils.sendPersonalAnnounce(pc, "Palbox destroyed via crosshair trace.")
+        local playerName = utils.GetPlayerName(state)
+        local playerUID = utils.GetPlayerId(state)
+        logger.logCommand(playerName, playerUID, "destroyatcrosshair", "")
+    else
+        utils.sendPersonalAnnounce(pc, "Found the palbox but failed to destroy it.")
+    end
+end
+
+
 
 local function destroyBaseCamp(pc, model)
     local manager = getBaseCampManager()
@@ -41,14 +152,18 @@ local function destroyBaseCamp(pc, model)
     end
 
     local nameOk, campName = pcall(function() return model:GetBaseCampName():ToString() end)
+    logger.info(string.format("DESTROYBASE_DEBUG campName ok=%s len=%s value=%q", tostring(nameOk), tostring(campName and #campName or "n/a"), tostring(campName)))
     local idOk, campId = pcall(function() return model:GetId() end)
     if not idOk or not campId then
         utils.sendPersonalAnnounce(pc, "Could not resolve base camp ID.")
         return false
     end
 
-    local palboxDestroyed = destroyPalboxActor(campId)
-
+    -- FindAllOf-based physical lookup removed 2026-08-18 -- confirmed
+    -- non-functional on this port for any class name tried. This function
+    -- now only does what actually works: the manager-level dismantle.
+    -- Physical removal is handled separately by handleDestroyAtCrosshair
+    -- (line trace, no FindAllOf/OnHit involved).
     local destroyOk = pcall(function()
         manager:RequestDismantalDistanceBaseCamp(campId)
     end)
@@ -58,10 +173,7 @@ local function destroyBaseCamp(pc, model)
         return false
     end
 
-    local msg = "Destroyed base: " .. (nameOk and campName or "Unknown")
-    if not palboxDestroyed then
-        msg = msg .. " (Palbox actor may still need manual removal)"
-    end
+    local msg = "Destroyed base: " .. (nameOk and campName or "Unknown") .. " (aim at the palbox and use !destroyatcrosshair to remove the physical structure)"
     utils.sendPersonalAnnounce(pc, msg)
     return true
 end
@@ -134,24 +246,20 @@ function commands.handleAdminGun(state, rest)
     local uid = utils.GetPlayerId(state)
     if not uid then return end
 
-    local enable = nil
     if rest and rest:lower() == "on" then
-        enable = true
-    elseif rest and rest:lower() == "off" then
-        enable = false
-    elseif not rest or rest == "" then
-        enable = not adminGunEnabled[uid]
-    else
-        utils.sendPersonalAnnounce(pc, "Usage: !admingun on/off")
-        return
-    end
-
-    if enable then
         adminGunEnabled[uid] = true
-        utils.sendPersonalAnnounce(pc, "Admin Gun enabled! Shoot any Palbox to destroy it.")
-    else
+        utils.sendPersonalAnnounce(pc, "Admin Gun: ON - Shoot any Palbox to destroy it.")
+    elseif rest and rest:lower() == "off" then
         adminGunEnabled[uid] = nil
-        utils.sendPersonalAnnounce(pc, "Admin Gun disabled!")
+        utils.sendPersonalAnnounce(pc, "Admin Gun: OFF")
+    else
+        if adminGunEnabled[uid] then
+            adminGunEnabled[uid] = nil
+            utils.sendPersonalAnnounce(pc, "Admin Gun: OFF")
+        else
+            adminGunEnabled[uid] = true
+            utils.sendPersonalAnnounce(pc, "Admin Gun: ON - Shoot any Palbox to destroy it.")
+        end
     end
 end
 

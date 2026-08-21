@@ -1,0 +1,167 @@
+[2026-08-12 23:12:51] [AdminCommands] AdminCommands has been loaded successfully!
+[2026-08-12 23:12:52] [AdminCommands] Hooks registered
+[2026-08-12 23:21:32] [AdminCommands] AdminCommands has been loaded successfully!
+[2026-08-12 23:21:33] [AdminCommands] Hooks registered
+[2026-08-12 23:40:29] [AdminCommands] AdminCommands has been loaded successfully!
+[2026-08-12 23:40:30] [AdminCommands] Hooks registered
+[2026-08-12 23:46:47] [AdminCommands] AdminCommands has been loaded successfully!
+[2026-08-12 23:46:48] [AdminCommands] Hooks registered
+[2026-08-13 00:00:48] [AdminCommands] AdminCommands has been loaded successfully!
+[2026-08-13 00:00:49] [AdminCommands] Hooks registered
+[2026-08-13 00:13:47] [AdminCommands] AdminCommands has been loaded successfully!
+[2026-08-13 00:13:48] [AdminCommands] Hooks registered
+[2026-08-13 00:21:58] [AdminCommands] AdminCommands has been loaded successfully!
+[2026-08-13 00:21:59] [AdminCommands] Hooks registered
+[2026-08-13 00:24:53] [AdminCommands] AdminCommands has been loaded successfully!
+[2026-08-13 00:24:54] [AdminCommands] Hooks registered
+[2026-08-13 00:26:57] [AdminCommands] AdminCommands has been loaded successfully!
+[2026-08-13 00:26:58] [AdminCommands] Hooks registered
+[2026-08-13 00:38:39] [AdminCommands] AdminCommands has been loaded successfully!
+[2026-08-13 00:38:40] [AdminCommands] Hooks registered
+[2026-08-13 01:11:35] [AdminCommands] AdminCommands has been loaded successfully!
+[2026-08-13 01:11:36] [AdminCommands] Hooks registered
+[2026-08-14 01:11:28] [AdminCommands] AdminCommands has been loaded successfully!
+[2026-08-14 01:11:29] [AdminCommands] Hooks registered
+[2026-08-14 17:56:11] [AdminCommands] AdminCommands has been loaded successfully!
+[2026-08-14 17:56:12] [AdminCommands] Hooks registered
+[2026-08-15 01:11:26] [AdminCommands] AdminCommands has been loaded successfully!
+[2026-08-15 01:11:27] [AdminCommands] Hooks registered
+[2026-08-16 01:11:25] [AdminCommands] AdminCommands has been loaded successfully!
+[2026-08-16 01:11:26] [AdminCommands] Hooks registered
+[2026-08-16 18:48:28] [AdminCommands] AdminCommands has been loaded successfully!
+[2026-08-16 18:48:29] [AdminCommands] Hooks registered
+[2026-08-16 18:54:30] [AdminCommands] AdminCommands has been loaded successfully!
+[2026-08-16 18:55:11] [AdminCommands] AdminCommands has been loaded successfully!
+[2026-08-16 18:58:34] [AdminCommands] AdminCommands has been loaded successfully!
+[2026-08-16 18:58:35] [AdminCommands] Hooks registered
+[2026-08-16 19:03:26] [AdminCommands] AdminCommands has been loaded successfully!
+[2026-08-16 19:03:27] [AdminCommands] Hooks registered
+[2026-08-16 19:15:30] [AdminCommands] AdminCommands has been loaded successfully!
+[2026-08-16 19:16:10] [AdminCommands] AdminCommands has been loaded successfully!
+[2026-08-16 19:16:11] [AdminCommands] Hooks registered
+[2026-08-16 19:18:13] [AdminCommands] DESTROYBASE_DEBUG target campId = 1130107089-1649295397--1306882032--748606872
+[2026-08-16 19:18:13] [AdminCommands] DESTROYBASE_DEBUG FindAllOf('PalBuildObjectBaseCampPoint') returned nil (not even an empty table)
+[2026-08-16 19:18:27] [AdminCommands] DESTROYBASE_DEBUG target campId = 1130107089-1649295397--1306882032--748606872
+[2026-08-16 19:18:27] [AdminCommands] DESTROYBASE_DEBUG FindAllOf('PalBuildObjectBaseCampPoint') returned nil (not even an empty table)
+[2026-08-16 19:22:02] [AdminCommands] AdminCommands has been loaded successfully!
+[2026-08-16 19:22:03] [AdminCommands] Hooks registered
+[2026-08-16 19:24:18] [AdminCommands] DESTROYBASE_DEBUG campName ok=true len=46 value="新規生成拠点テンプレート名53(仮)"
+[2026-08-16 19:24:18] [AdminCommands] DESTROYBASE_DEBUG target campId = 1130107089-1649295397--1306882032--748606872
+[2026-08-16 19:24:19] [AdminCommands] DESTROYBASE_DEBUG FindAllOf("/Script/Pal.PalBuildObjectBaseCampPoint") returned nil
+[2026-08-16 19:24:19] [AdminCommands] DESTROYBASE_DEBUG FindAllOf("PalBuildObjectBaseCampPoint") returned nil
+[2026-08-16 19:24:19] [AdminCommands] DESTROYBASE_DEBUG no candidate class name returned any actors -- see individual results above
+[2026-08-16 19:26:51] [AdminCommands] DESTROYBASE_DEBUG campName ok=true len=46 value="新規生成拠点テンプレート名87(仮)"
+[2026-08-16 19:26:51] [AdminCommands] DESTROYBASE_DEBUG target campId = -129872228-2119650188--2139438184--1084700201
+[2026-08-16 19:26:51] [AdminCommands] DESTROYBASE_DEBUG FindAllOf("/Script/Pal.PalBuildObjectBaseCampPoint") returned nil
+[2026-08-16 19:26:52] [AdminCommands] DESTROYBASE_DEBUG FindAllOf("PalBuildObjectBaseCampPoint") returned nil
+[2026-08-16 19:26:52] [AdminCommands] DESTROYBASE_DEBUG no candidate class name returned any actors -- see individual results above
+[2026-08-16 19:30:39] [AdminCommands] AdminCommands has been loaded successfully!
+[2026-08-16 19:30:40] [AdminCommands] Hooks registered
+[2026-08-16 19:31:49] [AdminCommands] DESTROYBASE_DEBUG campName ok=true len=46 value="新規生成拠点テンプレート名87(仮)"
+[2026-08-16 19:31:49] [AdminCommands] DESTROYBASE_DEBUG target campId = -129872228-2119650188--2139438184--1084700201
+[2026-08-16 19:31:49] [AdminCommands] DESTROYBASE_DEBUG class scan: FindAllOf('Class') failed or nil (ok=true)
+[2026-08-16 19:31:49] [AdminCommands] DESTROYBASE_DEBUG FindAllOf("/Script/Pal.PalBuildObjectBaseCampPoint") returned nil
+[2026-08-16 19:31:49] [AdminCommands] DESTROYBASE_DEBUG FindAllOf("PalBuildObjectBaseCampPoint") returned nil
+[2026-08-16 19:31:49] [AdminCommands] DESTROYBASE_DEBUG no candidate class name returned any actors -- see individual results above
+[2026-08-16 19:35:44] [AdminCommands] AdminCommands has been loaded successfully!
+[2026-08-16 19:35:45] [AdminCommands] Hooks registered
+[2026-08-16 19:37:02] [AdminCommands] DESTROYBASE_DEBUG campName ok=true len=46 value="新規生成拠点テンプレート名87(仮)"
+[2026-08-16 19:37:02] [AdminCommands] DESTROYBASE_DEBUG target campId = -129872228-2119650188--2139438184--1084700201
+[2026-08-16 19:37:03] [AdminCommands] DESTROYBASE_DEBUG class scan: FindAllOf('Class') failed or nil (ok=true)
+[2026-08-16 19:37:03] [AdminCommands] DESTROYBASE_DEBUG FindAllOf("/Script/Pal.PalBuildObjectBaseCampPoint") returned nil
+[2026-08-16 19:37:03] [AdminCommands] DESTROYBASE_DEBUG FindAllOf("PalBuildObjectBaseCampPoint") returned nil
+[2026-08-16 19:37:03] [AdminCommands] DESTROYBASE_DEBUG no candidate class name returned any actors -- see individual results above
+[2026-08-16 19:40:41] [AdminCommands] AdminCommands has been loaded successfully!
+[2026-08-16 19:41:22] [AdminCommands] AdminCommands has been loaded successfully!
+[2026-08-16 19:41:23] [AdminCommands] Hooks registered
+[2026-08-17 01:11:26] [AdminCommands] AdminCommands has been loaded successfully!
+[2026-08-17 01:11:27] [AdminCommands] Hooks registered
+[2026-08-17 12:06:46] [AdminCommands] DESTROYBASE_DEBUG campName ok=true len=46 value="新規生成拠点テンプレート名53(仮)"
+[2026-08-17 12:06:46] [AdminCommands] DESTROYBASE_DEBUG target campId = 1130107089-1649295397--1306882032--748606872
+[2026-08-17 12:06:47] [AdminCommands] DESTROYBASE_DEBUG class scan: FindAllOf('Class') failed or nil (ok=true)
+[2026-08-17 12:06:47] [AdminCommands] DESTROYBASE_DEBUG FindAllOf("/Script/Pal.PalBuildObjectBaseCampPoint") returned nil
+[2026-08-17 12:06:47] [AdminCommands] DESTROYBASE_DEBUG FindAllOf("PalBuildObjectBaseCampPoint") returned nil
+[2026-08-17 12:06:47] [AdminCommands] DESTROYBASE_DEBUG no candidate class name returned any actors -- see individual results above
+[2026-08-18 01:11:36] [AdminCommands] AdminCommands has been loaded successfully!
+[2026-08-18 01:11:37] [AdminCommands] Hooks registered
+[2026-08-18 12:36:06] [AdminCommands] DESTROYBASE_DEBUG campName ok=true len=46 value="新規生成拠点テンプレート名53(仮)"
+[2026-08-18 12:36:06] [AdminCommands] DESTROYBASE_DEBUG target campId = 1130107089-1649295397--1306882032--748606872
+[2026-08-18 12:36:06] [AdminCommands] DESTROYBASE_DEBUG class scan: FindAllOf('Class') failed or nil (ok=true)
+[2026-08-18 12:36:06] [AdminCommands] DESTROYBASE_DEBUG FindFirstOf("/Script/Pal.PalBuildObjectBaseCampPoint") returned an object, IsValid=false
+[2026-08-18 12:36:06] [AdminCommands] DESTROYBASE_DEBUG FindFirstOf("PalBuildObjectBaseCampPoint") returned an object, IsValid=false
+[2026-08-18 12:36:07] [AdminCommands] DESTROYBASE_DEBUG FindAllOf("/Script/Pal.PalBuildObjectBaseCampPoint") returned nil
+[2026-08-18 12:36:07] [AdminCommands] DESTROYBASE_DEBUG FindAllOf("PalBuildObjectBaseCampPoint") returned nil
+[2026-08-18 12:36:07] [AdminCommands] DESTROYBASE_DEBUG no candidate class name returned any actors -- see individual results above
+[2026-08-18 12:50:34] [AdminCommands] AdminCommands has been loaded successfully!
+[2026-08-18 12:50:35] [AdminCommands] Hooks registered
+[2026-08-18 13:11:07] [AdminCommands] AdminCommands has been loaded successfully!
+[2026-08-18 13:16:01] [AdminCommands] AdminCommands has been loaded successfully!
+[2026-08-18 13:16:02] [AdminCommands] Hooks registered
+[2026-08-18 14:11:09] [AdminCommands] AdminCommands has been loaded successfully!
+[2026-08-18 14:11:10] [AdminCommands] Hooks registered
+[2026-08-18 16:49:34] [AdminCommands] AdminCommands has been loaded successfully!
+[2026-08-18 16:49:36] [AdminCommands] Hooks registered
+[2026-08-18 17:01:00] [AdminCommands] AdminCommands has been loaded successfully!
+[2026-08-18 17:01:40] [AdminCommands] AdminCommands has been loaded successfully!
+[2026-08-18 17:01:41] [AdminCommands] Hooks registered
+[2026-08-18 17:02:29] [AdminCommands] DESTROYBASE_DEBUG traceForPalbox: hit actor class = BlueprintGeneratedClass /Game/Pal/Blueprint/MapObject/BuildObject/BP_BuildObject_PalBoxV2.BP_BuildObject_PalBoxV2_C
+[2026-08-18 17:02:29] [AdminCommands] DESTROYBASE_DEBUG traceForPalbox: disposeOk=true dismantleOk=true
+[2026-08-18 17:02:34] [AdminCommands] DESTROYBASE_DEBUG traceForPalbox: hit actor class = Class /Script/Landscape.LandscapeStreamingProxy
+[2026-08-18 17:03:07] [AdminCommands] DESTROYBASE_DEBUG traceForPalbox: hit actor class = BlueprintGeneratedClass /Game/Pal/Blueprint/MapObject/BuildObject/BP_BuildObject_Wood_Foundation.BP_BuildObject_Wood_Foundation_C
+[2026-08-18 17:28:04] [AdminCommands] DESTROYBASE_DEBUG traceForPalbox: hit actor class = BlueprintGeneratedClass /Game/Pal/Blueprint/MapObject/BuildObject/BP_BuildObject_PalBoxV2.BP_BuildObject_PalBoxV2_C
+[2026-08-18 17:28:05] [AdminCommands] DESTROYBASE_DEBUG traceForPalbox: disposeOk=true dismantleOk=true
+[2026-08-18 17:37:39] [AdminCommands] AdminCommands has been loaded successfully!
+[2026-08-18 17:40:53] [AdminCommands] AdminCommands has been loaded successfully!
+[2026-08-18 17:40:54] [AdminCommands] Hooks registered
+[2026-08-18 17:57:13] [AdminCommands] DESTROYBASE_DEBUG traceForPalbox: hit actor class = Class /Script/Landscape.LandscapeStreamingProxy
+[2026-08-18 17:57:21] [AdminCommands] DESTROYBASE_DEBUG traceForPalbox: hit actor class = BlueprintGeneratedClass /Game/Pal/Blueprint/MapObject/BuildObject/BP_BuildObject_PalBoxV2.BP_BuildObject_PalBoxV2_C
+[2026-08-18 17:57:21] [AdminCommands] DESTROYBASE_DEBUG traceForPalbox: disposeOk=true dismantleOk=true
+[2026-08-18 23:01:27] [AdminCommands] AdminCommands has been loaded successfully!
+[2026-08-18 23:02:07] [AdminCommands] AdminCommands has been loaded successfully!
+[2026-08-19 00:15:18] [AdminCommands] AdminCommands has been loaded successfully!
+[2026-08-19 00:15:19] [AdminCommands] Hooks registered
+[2026-08-19 01:11:26] [AdminCommands] AdminCommands has been loaded successfully!
+[2026-08-19 01:11:27] [AdminCommands] Hooks registered
+[2026-08-20 01:20:45] [AdminCommands] AdminCommands has been loaded successfully!
+[2026-08-20 01:21:25] [AdminCommands] AdminCommands has been loaded successfully!
+[2026-08-20 07:18:17] [AdminCommands] AdminCommands has been loaded successfully!
+[2026-08-20 07:18:18] [AdminCommands] Hooks registered
+[2026-08-20 07:30:02] [AdminCommands] AdminCommands has been loaded successfully!
+[2026-08-20 07:30:03] [AdminCommands] Hooks registered
+[2026-08-20 09:37:17] [AdminCommands] DESTROYBASE_DEBUG traceForPalbox: hit actor class = BlueprintGeneratedClass /Game/Pal/Blueprint/MapObject/BuildObject/BP_BuildObject_PalBoxV2.BP_BuildObject_PalBoxV2_C
+[2026-08-20 09:37:17] [AdminCommands] DESTROYBASE_DEBUG traceForPalbox: disposeOk=true dismantleOk=true
+[2026-08-20 13:31:52] [AdminCommands] AdminCommands has been loaded successfully!
+[2026-08-20 13:31:53] [AdminCommands] Hooks registered
+[2026-08-20 13:36:28] [AdminCommands] AdminCommands has been loaded successfully!
+[2026-08-20 14:23:58] [AdminCommands] AdminCommands has been loaded successfully!
+[2026-08-20 14:23:59] [AdminCommands] Hooks registered
+[2026-08-20 14:27:05] [AdminCommands] AdminCommands has been loaded successfully!
+[2026-08-20 14:27:06] [AdminCommands] Hooks registered
+[2026-08-20 14:29:32] [AdminCommands] AdminCommands has been loaded successfully!
+[2026-08-20 14:29:33] [AdminCommands] Hooks registered
+[2026-08-20 14:41:14] [AdminCommands] AdminCommands has been loaded successfully!
+[2026-08-20 14:41:15] [AdminCommands] Hooks registered
+[2026-08-20 14:52:45] [AdminCommands] AdminCommands has been loaded successfully!
+[2026-08-20 14:52:46] [AdminCommands] Hooks registered
+[2026-08-20 15:05:50] [AdminCommands] AdminCommands has been loaded successfully!
+[2026-08-20 15:05:51] [AdminCommands] Hooks registered
+[2026-08-20 15:19:42] [AdminCommands] AdminCommands has been loaded successfully!
+[2026-08-20 15:19:43] [AdminCommands] Hooks registered
+[2026-08-20 18:02:20] [AdminCommands] AdminCommands has been loaded successfully!
+[2026-08-20 18:03:01] [AdminCommands] AdminCommands has been loaded successfully!
+[2026-08-20 18:03:02] [AdminCommands] Hooks registered
+[2026-08-20 19:05:03] [AdminCommands] AdminCommands has been loaded successfully!
+[2026-08-20 19:05:04] [AdminCommands] Hooks registered
+[2026-08-20 20:24:51] [AdminCommands] DESTROYBASE_DEBUG traceForPalbox: trace found nothing in range
+[2026-08-21 01:11:31] [AdminCommands] AdminCommands has been loaded successfully!
+[2026-08-21 01:12:15] [AdminCommands] AdminCommands has been loaded successfully!
+[2026-08-21 01:12:58] [AdminCommands] AdminCommands has been loaded successfully!
+[2026-08-21 01:12:59] [AdminCommands] Hooks registered
+[2026-08-21 05:16:08] [AdminCommands] AdminCommands has been loaded successfully!
+[2026-08-21 05:16:09] [AdminCommands] Hooks registered
+[2026-08-21 05:16:55] [AdminCommands] AdminCommands has been loaded successfully!
+[2026-08-21 05:16:56] [AdminCommands] Hooks registered
+[2026-08-21 08:30:46] [AdminCommands] AdminCommands has been loaded successfully!
+[2026-08-21 08:30:47] [AdminCommands] Hooks registered
+[2026-08-21 09:59:48] [AdminCommands] AdminCommands has been loaded successfully!
+[2026-08-21 09:59:49] [AdminCommands] Hooks registered
